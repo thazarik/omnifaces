@@ -23,6 +23,17 @@
 	<tag>
 		<description>
 			<![CDATA[
+			]]>
+		</description>
+		<tag-name>head</tag-name>
+		<component>
+			<component-type>org.omnifaces.component.output.Head</component-type>
+		</component>
+	</tag>
+
+	<tag>
+		<description>
+			<![CDATA[
 				<strong><code>o:tree</code></strong> is an <code>UIComponent</code> that supports data binding to a tree
 				of data objects represented by a <code>TreeModel</code> instance, which is the current value of this
 				component itself (typically established via a <code>ValueExpression</code>). During iterative processing

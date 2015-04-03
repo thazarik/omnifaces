@@ -14,6 +14,7 @@ package org.omnifaces.component.script;
 
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.FacesComponent;
+import javax.faces.component.UIComponent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ListenerFor;
@@ -64,23 +65,33 @@ public class DeferredScript extends ScriptFamily {
 	/** The standard component type. */
 	public static final String COMPONENT_TYPE = "org.omnifaces.component.script.DeferredScript";
 
-	// Constructors ---------------------------------------------------------------------------------------------------
+    private final UIComponent  wrapped;
 
-	/**
-	 * Construct a new {@link DeferredScript} component whereby the renderer type is set to
-	 * {@link DeferredScriptRenderer#RENDERER_TYPE}.
-	 */
-	public DeferredScript() {
-		setRendererType(DeferredScriptRenderer.RENDERER_TYPE);
-	}
+
+	// Constructors ---------------------------------------------------------------------------------------------------
+    /**
+     * Construct a new {@link DeferredScript} component whereby the renderer type is set to {@link DeferredScriptRenderer#RENDERER_TYPE}.
+     */
+    public DeferredScript() {
+        this(null);
+    }
+
+    public DeferredScript(UIComponent wrapped) {
+        this.wrapped = null;
+        if (wrapped != null) {
+            getAttributes().putAll(wrapped.getAttributes());
+        }
+        setRendererType(DeferredScriptRenderer.RENDERER_TYPE);
+    }
 
 	// Actions --------------------------------------------------------------------------------------------------------
 
-	@Override
-	public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-		if (moveToBody(event, this)) {
-			Hacks.setScriptResourceRendered(getFacesContext(), new ResourceIdentifier(this));
-		}
-	}
+    @Override
+    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+        final UIComponent affected = wrapped == null ? this : wrapped;
+        if (moveToBody(event, affected, getFacesContext())) {
+            Hacks.setScriptResourceRendered(getFacesContext(), new ResourceIdentifier(affected));
+        }
+    }
 
 }

@@ -12,6 +12,7 @@
  */
 package org.omnifaces.component.script;
 
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -60,12 +61,11 @@ public abstract class ScriptFamily extends UIComponentBase {
 	 * @param component The component to be moved to body.
 	 * @return <code>true</code> if the move has taken place.
 	 */
-	protected static boolean moveToBody(ComponentSystemEvent event, ScriptFamily component) {
+	protected static boolean moveToBody(ComponentSystemEvent event, UIComponent component, FacesContext context) {
 		if (!(event instanceof PostAddToViewEvent || event instanceof PostRestoreStateEvent)) {
 			return false;
 		}
 
-		FacesContext context = component.getFacesContext();
 		UIViewRoot view = context.getViewRoot();
 
 		if (context.isPostback() ? !view.getComponentResources(context, "body").contains(component) : event instanceof PostAddToViewEvent) {
